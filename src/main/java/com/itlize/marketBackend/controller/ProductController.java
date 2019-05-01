@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.itlize.marketBackend.domain.Sales;
 import com.itlize.marketBackend.service.ProductService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 public class ProductController {
 
 	

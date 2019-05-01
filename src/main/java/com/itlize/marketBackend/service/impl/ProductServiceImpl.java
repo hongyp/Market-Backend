@@ -83,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
 					int value = Integer.parseInt(attributes.get(key));
 					//can generate exceptions if json data is wrong
 					Map<String, Integer> range = (Map<String, Integer>) filterParams.get(key);
+//					System.out.println(key);
 					if(value <= range.get("max") && value >= range.get("min")) {
 						continue;
 					} else {
