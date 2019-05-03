@@ -25,7 +25,7 @@ public class Product {
 //	private Date date;
 	
 	@Column(name = "ManufacturerID")
-	private String manufacturerId;
+	private int manufacturerId;
 
 	
 	@Column(name = "SalesID")
@@ -78,11 +78,11 @@ public class Product {
 //		this.date = date;
 //	}
 
-	public String getManufacturerId() {
+	public int getManufacturerId() {
 		return manufacturerId;
 	}
 
-	public void setManufacturerId(String manufacturerId) {
+	public void setManufacturerId(int manufacturerId) {
 		this.manufacturerId = manufacturerId;
 	}
 

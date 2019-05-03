@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itlize.marketBackend.Util.exceptions.AuthenticationException;
+import com.itlize.marketBackend.Util.exceptions.UserExistsException;
 import com.itlize.marketBackend.dao.BuyerDAO;
 import com.itlize.marketBackend.domain.Buyer;
 import com.itlize.marketBackend.service.BuyerService;
@@ -48,7 +49,7 @@ public class BuyerServiceImpl implements BuyerService {
 			throw new Exception("Please fill the required information!!!");
 		}
 		if (this.isBuyerExist(buyer.getUsername())) {
-			return false;
+			throw new UserExistsException();
 		}
 		buyerDao.addBuyer(buyer);
 		return true;

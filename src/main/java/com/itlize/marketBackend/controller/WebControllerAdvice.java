@@ -1,17 +1,15 @@
 package com.itlize.marketBackend.controller;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import com.itlize.marketBackend.Util.exceptions.ApiErrorResponse;
 import com.itlize.marketBackend.Util.exceptions.AuthenticationException;
+import com.itlize.marketBackend.Util.exceptions.UserExistsException;
 import com.itlize.marketBackend.Util.exceptions.UserNotFoundException;
 
 @RestControllerAdvice
@@ -37,6 +35,16 @@ public class WebControllerAdvice {
 				.withStatus(HttpStatus.UNAUTHORIZED)
 				.withError_code(HttpStatus.UNAUTHORIZED.name())
 				.withMessage("Bad Credentials!")
+				.build();
+		return new ResponseEntity<>(response, response.getStatus());
+	}
+	
+	@ExceptionHandler(UserExistsException.class)
+	public ResponseEntity<?> handleAuth(UserExistsException ex) {
+		ApiErrorResponse response = new ApiErrorResponse.ApiErrorResponseBuilder()
+				.withStatus(HttpStatus.BAD_REQUEST)
+				.withError_code(HttpStatus.BAD_REQUEST.name())
+				.withMessage("User already exists!")
 				.build();
 		return new ResponseEntity<>(response, response.getStatus());
 	}

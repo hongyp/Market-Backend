@@ -1,13 +1,6 @@
 package com.itlize.marketBackend.controller;
 
 
-import javax.servlet.http.HttpServletResponse;
-
-//import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.ArrayList;
@@ -15,24 +8,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.jboss.logging.Logger;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.AuthenticationException;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itlize.marketBackend.Util.JWTProvider;
+import com.itlize.marketBackend.Util.exceptions.AuthenticationException;
+import com.itlize.marketBackend.Util.exceptions.UserExistsException;
 import com.itlize.marketBackend.Util.exceptions.UserNotFoundException;
 import com.itlize.marketBackend.domain.AuthenticationRequest;
 import com.itlize.marketBackend.domain.Buyer;
 import com.itlize.marketBackend.service.BuyerService;
-import com.itlize.marketBackend.Util.exceptions.AuthenticationException;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
@@ -53,10 +48,16 @@ public class BuyerController {
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public void addBuyer(@RequestBody Buyer new_buyer) throws Throwable {
-		if (!buyerService.addBuyer(new_buyer)) {
-			System.out.println("User already existed!!! Failed to register...");
-		} else {
-			System.out.println("Successfully register!!!");
+//		if (!buyerService.addBuyer(new_buyer)) {
+//			System.out.println("User already existed!!! Failed to register...");
+//		} else {
+//			System.out.println("Successfully register!!!");
+//		}
+		try {
+			buyerService.addBuyer(new_buyer);
+			
+		} catch(UserExistsException e) {
+			throw e;
 		}
 	}
 	
