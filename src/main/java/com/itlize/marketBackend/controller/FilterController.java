@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itlize.marketBackend.domain.Attribute;
 import com.itlize.marketBackend.domain.AttributeType;
 import com.itlize.marketBackend.domain.Product;
+import com.itlize.marketBackend.domain.Products_Multiple;
 import com.itlize.marketBackend.domain.Range;
 import com.itlize.marketBackend.service.FilterService;
 import com.itlize.marketBackend.service.ProductService;
@@ -41,7 +42,7 @@ public class FilterController {
 	}
 	
 	@RequestMapping(value = "/filter/{subCateId}", method = RequestMethod.POST)
-	public List<Product> filterResult(@PathVariable("subCateId")int subCateId,
+	public List<Products_Multiple> filterResult(@PathVariable("subCateId")int subCateId,
 									@RequestBody Map<String, Object> payload) {
 		Map<String, Range> filterParams = new HashMap<String, Range>();
 		Range r1 = new Range(0, 10);

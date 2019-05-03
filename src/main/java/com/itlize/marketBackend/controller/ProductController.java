@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.itlize.marketBackend.domain.Manufacturer;
 import com.itlize.marketBackend.domain.Product;
+import com.itlize.marketBackend.domain.Products_Multiple;
 import com.itlize.marketBackend.domain.Sales;
 import com.itlize.marketBackend.service.ProductService;
 
@@ -47,7 +48,7 @@ public class ProductController {
 	//get products by sub category
 	// may not need to poplulate the xml columns
 	@RequestMapping(value="/subcate/{subid}/products", method = RequestMethod.GET)
-	public List<Product> getProductsBySubCategory(@PathVariable("subid")int subCategoryID) {
+	public List<Products_Multiple> getProductsBySubCategory(@PathVariable("subid")int subCategoryID) {
 		return productService.getAllSubCateProducts(subCategoryID);
 	}
 	

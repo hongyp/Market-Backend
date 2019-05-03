@@ -28,7 +28,8 @@ public class ProductDAOImpl implements ProductDAO {
 									.add(Restrictions.eq("subCategoryID", subCategoryID))
 									.setProjection(Projections.projectionList()
 											.add(Projections.property("p.description"), "description")
-											.add(Projections.property("p.attributes"), "attributes"));
+											.add(Projections.property("p.attributes"), "attributes")
+											.add(Projections.property("p.ProductID"), "productId"));
 		return cr.list();
 	}
 

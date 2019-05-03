@@ -15,6 +15,7 @@ import com.itlize.marketBackend.dao.ProductDAO;
 import com.itlize.marketBackend.dao.SalesDAO;
 import com.itlize.marketBackend.domain.Manufacturer;
 import com.itlize.marketBackend.domain.Product;
+import com.itlize.marketBackend.domain.Products_Multiple;
 import com.itlize.marketBackend.domain.Sales;
 import com.itlize.marketBackend.service.ProductService;
 
@@ -26,15 +27,18 @@ public class ProductServiceImpl implements ProductService {
 	ProductDAO productDao;
 
 	@Override
-	public List<Product> getAllSubCateProducts(int subCategoryID) {
+	public List<Products_Multiple> getAllSubCateProducts(int subCategoryID) {
 		// TODO Auto-generated method stub
 		List<Object[]> rs = productDao.getAllSubCateProducts(subCategoryID);
-		List<Product> ret = new LinkedList<>();
+		List<Products_Multiple> ret = new LinkedList<>();
+		
 		for(Object[] p: rs) {
 			System.out.println(p);
-			Product pdt = new Product();
+			Products_Multiple pdt = new Products_Multiple();
 			pdt.setDescription((String) p[0]);
-			pdt.setAttributes((String) p[1]);
+			Map<String, Map<String, String>> map = (Map<String, Map<String, String>>)XmlDetailsParser.operation_inputXmlString((String)p[1]);
+			pdt.setAttributes(map.get("attribute"));
+			pdt.setProductId((int) p[2]);
 			ret.add(pdt);
 		}
 		return ret;
@@ -49,10 +53,10 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Product> filter(Map<String, Object> filterParams, int subCategoryID) {
+	public List<Products_Multiple> filter(Map<String, Object> filterParams, int subCategoryID) {
 		// TODO Auto-generated method stub
-		List<Product> originProducts = this.getAllSubCateProducts(subCategoryID);
-		List<Product> res = new ArrayList<>();
+		List<Products_Multiple> originProducts = (List<Products_Multiple>) this.getAllSubCateProducts(subCategoryID);
+		List<Products_Multiple> res = new ArrayList<>();
 		Map<String, String> attributes = null;
 		final String ATTRIBUTE = "attribute";
 		//testing
@@ -68,11 +72,11 @@ public class ProductServiceImpl implements ProductService {
 		
 		
 		for(int i = 0; i < originProducts.size(); i++) {
-			Product p = originProducts.get(i);
+			Products_Multiple p = originProducts.get(i);
 //			attributes = ParseXml.parseAttributes(p.getAttributes());
 //			attributes = dummyAttr.get(i % 2);
-			Map<String, Map<String, String>>attributesMap = (Map<String, Map<String, String>>)XmlDetailsParser.operation_inputXmlString(p.getAttributes());
-			attributes = attributesMap.get(ATTRIBUTE);
+//			Map<String, Map<String, String>> attributesMap = (Map<String, Map<String, String>>)XmlDetailsParser.operation_inputXmlString(p.getAttributes());
+			attributes = p.getAttributes();
 			boolean flag = true;
 			for(String key: filterParams.keySet()) {
 				if(!attributes.containsKey(key)) {
@@ -80,16 +84,15 @@ public class ProductServiceImpl implements ProductService {
 					break;
 				}
 				
-					int value = Integer.parseInt(attributes.get(key));
-					//can generate exceptions if json data is wrong
-					Map<String, Integer> range = (Map<String, Integer>) filterParams.get(key);
-//					System.out.println(key);
-					if(value <= range.get("max") && value >= range.get("min")) {
-						continue;
-					} else {
-						flag = false;
-						break;
-					}
+				int value = Integer.parseInt(attributes.get(key));
+				//can generate exceptions if json data is wrong
+				Map<String, Integer> range = (Map<String, Integer>) filterParams.get(key);
+				if(value <= range.get("max") && value >= range.get("min")) {
+					continue;
+				} else {
+					flag = false;
+					break;
+				}
 					//Range range = filterParams.get(key);	
 					//if(value <= range.getMaxValue() && value >= range.getMinValue()) res.add(p); 
 				
